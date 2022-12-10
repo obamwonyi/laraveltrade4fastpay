@@ -1,35 +1,45 @@
----
-title: Laravel
-description: A Laravel app that connects to a PostgreSQL database
-tags:
-  - php
-  - laravel
-  - postgresql
----
+# API For Trade4FastPay Project 
 
-# Laravel Starter Example
 
-This is a [Laravel](https://laravel.com/) starter app that connects to a Railway Postgres database.
 
-[![Deploy on Railway Test](https://railway.app/button.svg)](https://railway.app/new/template/fWEWWf)
 
-## ✨ Features
+__Note: *The Api Was Versioned by Storing the Controllers in a Route folder and 
+adding a url prefix of V1*.__
 
-- PHP
-- Laravel
-- Postgres
+## Routes available : 
 
-## 💁‍♀️ How to use
+__Note: *Base = localhost,http://127.0.0.1:8000 or any base route 
+created by your local machine or remote host.*__
 
-- [Create a Railway project with the Postgres plugin](https://railway.app/project?plugins=postgresql)
-- Connect to your Railway project with `railway link`
+### Routes for Unauthorized Users.
+* Register User : Base/api/V1/register
+* Send mail verification : Base/api/V1/send-verify-mail/{email} 
+* Forgot password : Base/api/V1/forgot-password/{email} 
+* Reset password : Base/api/V1/reset-password/{token} 
 
-## 📝 Notes
+### Routes for Authorized Users only
+* Logout : Base/api/V1/logout
+### Trade Routes
+__Note: *Trades can only be made by an authorized user (user with a token) 
+and the trades made are only available to that particular user that has 
+been authorized after login*__
+* trade(GET method)  : Base/api/V1/trade (fetch all the trade for the authorized user)
+* trade (POST method) : Base/api/V1/trade (creates a trade for the particular authorized user)
+* trade-show (GET method) : Base/api/V1/trade/{id} (shows a trade with an id of the value specified where {id} is. user for the particular authorized user)
+* trade-delete (DELETE method) : Base/api/V1/trade/{id} (delete the trade made )
+api/V1/trade/1
 
-- **Dockerfile**: The `Dockerfile` and associated files in `docker/` are based on [Laravel Sail PHP 8.0](https://github.com/laravel/sail/tree/1.x/runtimes/8.0)
-- **Plugin Config**: To connect to a Railway Plugin, Postgres for example, you will need to utilize the environment variables listed for that plugin in the [Railway Docs](https://docs.railway.app/).
-  See the `.env.example` for an example of using these with Postgres.
-- **Web server port**: Railway dynamically assigns a port for your webserver. We grab the `$PORT` environment variable in `docker/start-container` to set this on Artisan `serve`
-- **Logging**: Because the disk on Railway containers is ephemeral, we pipe the logs normally output to `storage/logs/laravel.log` to `stdout` [as seen here](https://github.com/sorrell/railavel/commit/2802b8c5032a13a601a903276ee2181678009f67)
-- **APP_KEY**: This starter will automatically generate the `APP_KEY` (`php artisan key:generate` in the `docker/start-container`)
-- **Migrations**: This starter automatically runs migrations on deploy (in the `docker/start-container`)
+### Presumed Work Flow for registration and login 
+* When a user comes then sign in. 
+* after sign in a verification link is sent which they click to verify their mail 
+* Then are told to login 
+* After login they get authorized (by being assigned a token)
+* With the token the can now access the trade functionality 
+* As only authorized users should be able to trade coin(or so) 
+
+### Presumed Work Flow for password forget and reset 
+* Enter the mail (my back end code check if the mail actually belongs to a user)
+* If yes for above then the mail is sent to the mail inserted in the form field 
+* finally the password is changed 
+
+### JSON Response Structure not confirmed yet 
